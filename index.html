@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lee's Beauty Studio | Makeup, Lashes &amp; Nails by Lisa</title>
+  <meta name="description" content="Lee's Beauty Studio: bridal and glam makeup, lash extensions, nails, pedicures and piercings by Lisa. Studio and home-service appointments. Book on WhatsApp." />
+
+  <!-- Social share preview (WhatsApp / Instagram / Facebook) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Lee's Beauty Studio | Every Face, a Canvas" />
+  <meta property="og:description" content="Bridal and glam makeup, lashes, nails and more by Lisa. Book your appointment on WhatsApp." />
+  <meta property="og:image" content="images/jackie3.jpeg" /><!-- TODO: use an absolute URL once the site is live -->
+  <meta name="theme-color" content="#1f1714" />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231f1714'/><text x='50' y='68' font-size='54' text-anchor='middle' fill='%23d9b99b' font-family='Georgia,serif' font-style='italic'>L</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <script>document.documentElement.classList.add("js");</script>
+
+  <!-- Helps Google show the studio in local "beauty studio near me" searches -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BeautySalon",
+    "name": "Lee's Beauty Studio",
+    "founder": "Lisa",
+    "telephone": "+233507880080",
+    "image": "images/jackie3.jpeg",
+    "address": { "@type": "PostalAddress", "addressLocality": "Accra", "addressCountry": "GH" },
+    "priceRange": "GHS 100 - 400"
+  }
+  </script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header" id="siteHeader">
+    <div class="container header-inner">
+      <a href="#home" class="wordmark" aria-label="Lee's Beauty Studio, home">
+        Lee's <em>Beauty Studio</em>
+      </a>
+
+      <nav class="nav" id="nav" aria-label="Main">
+        <a href="#services">Services</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#about">About</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#faq">FAQ</a>
+        <a href="#book" class="btn btn-small">Book now</a>
+      </nav>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="home">
+      <div class="container hero-inner">
+        <div class="hero-text reveal">
+          <p class="eyebrow">Makeup · Lashes · Nails · Accra</p>
+          <h1>Every face,<br /><em>a canvas.</em></h1>
+          <p class="lead">
+            I'm Lisa. At Lee's Beauty Studio I create flawless bridal looks, soft glam
+            and lashes that make you feel like the best version of yourself, in my studio or at your door.
+          </p>
+          <div class="hero-actions">
+            <a href="#book" class="btn">Book an appointment</a>
+            <a href="#portfolio" class="btn btn-ghost">See my work</a>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal" style="--delay: .15s">
+          <!-- TODO: replace with Lisa's own best photo -->
+          <div class="arch">
+            <img src="images/jackie3.jpeg" alt="Glam makeup look by Lee's Beauty Studio" fetchpriority="high" />
+          </div>
+          <div class="hero-badge">
+            <i class="fa-solid fa-house-chimney" aria-hidden="true"></i>
+            <span>Studio &amp;<br />home service</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SERVICES ===== -->
+    <section class="section" id="services">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="eyebrow">Services &amp; pricing</p>
+          <h2>Signature services</h2>
+          <p>Every appointment starts with a quick consultation so the look is truly yours.</p>
+        </header>
+
+        <!-- TODO: confirm every service, description and price with Lisa -->
+        <div class="services-grid">
+          <article class="service reveal">
+            <span class="service-icon"><i class="fa-solid fa-ring" aria-hidden="true"></i></span>
+            <h3>Bridal Glam</h3>
+            <p>Flawless, long-wearing makeup for your big day, made to last from the first look to the last dance.</p>
+            <div class="service-foot">
+              <span class="price">GHS 250 – 400</span>
+              <a href="#book" class="link-arrow" data-service="Bridal Glam">Book <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+          </article>
+
+          <article class="service reveal" style="--delay: .05s">
+            <span class="service-icon"><i class="fa-solid fa-eye" aria-hidden="true"></i></span>
+            <h3>Mink Lash Extensions</h3>
+            <p>Fluffy, feather-light mink lashes, mapped to suit your eye shape.</p>
+            <div class="service-foot">
+              <span class="price">GHS 100 – 180</span>
+              <a href="#book" class="link-arrow" data-service="Mink Lash Extensions">Book <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+          </article>
+
+          <article class="service reveal" style="--delay: .1s">
+            <span class="service-icon"><i class="fa-regular fa-eye" aria-hidden="true"></i></span>
+            <h3>Classic Lashes</h3>
+            <p>Natural, everyday definition that opens up the eyes.</p>
+            <div class="service-foot">
+              <span class="price">GHS 100 – 180</span>
+              <a href="#book" class="link-arrow" data-service="Classic Lashes">Book <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+          </article>
+
+          <article class="service reveal">
+            <span class="service-icon"><i class="fa-solid fa-hand-sparkles" aria-hidden="true"></i></span>
+            <h3>Nails</h3>
+            <p>Clean, glossy sets in any shape, from soft nudes to statement art.</p>
+            <div class="service-foot">
+              <span class="price">GHS 100 – 180</span>
+              <a href="#book" class="link-arrow" data-service="Nails">Book <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+          </article>
+
+          <article class="service reveal" style="--delay: .05s">
+            <span class="service-icon"><i class="fa-solid fa-spa" aria-hidden="true"></i></span>
+            <h3>Pedicure</h3>
+            <p>A relaxing soak, scrub and polish that leaves your feet soft and sandal-ready.</p>
+            <div class="service-foot">
+              <span class="price">GHS 150 – 250</span>
+              <a href="#book" class="link-arrow" data-service="Pedicure">Book <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+          </article>
+
+          <article class="service reveal" style="--delay: .1s">
+            <span class="service-icon"><i class="fa-solid fa-gem" aria-hidden="true"></i></span>
+            <h3>Piercings</h3>
+            <p>Clean, careful piercings with sterile tools and aftercare guidance.</p>
+            <div class="service-foot">
+              <span class="price">GHS 180 – 300</span>
+              <a href="#book" class="link-arrow" data-service="Piercings">Book <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PORTFOLIO ===== -->
+    <section class="section section-tint" id="portfolio">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="eyebrow">Portfolio</p>
+          <h2>The work</h2>
+          <p>Tap any photo to see it up close.</p>
+        </header>
+
+        <div class="filters reveal" role="group" aria-label="Filter portfolio">
+          <button class="chip is-active" data-filter="all">All</button>
+          <button class="chip" data-filter="bridal">Bridal</button>
+          <button class="chip" data-filter="glam">Glam</button>
+          <button class="chip" data-filter="lashes">Lashes</button>
+          <button class="chip" data-filter="nails">Nails</button>
+        </div>
+
+        <!-- TODO: replace with Lisa's real photos. Set data-cat to bridal / glam / lashes / nails -->
+        <div class="gallery" id="gallery">
+          <figure class="shot tall" data-cat="bridal"><img src="images/jackie1.jpeg" alt="Bridal makeup look" loading="lazy" /><figcaption>Bridal</figcaption></figure>
+          <figure class="shot" data-cat="glam"><img src="images/jackie3.jpeg" alt="Red-lip glam look" loading="lazy" /><figcaption>Glam</figcaption></figure>
+          <figure class="shot" data-cat="lashes"><img src="images/jackie1.jpeg" alt="Lash extensions close-up" loading="lazy" /><figcaption>Lashes</figcaption></figure>
+          <figure class="shot tall" data-cat="glam"><img src="images/jackie3.jpeg" alt="Soft glam look" loading="lazy" /><figcaption>Glam</figcaption></figure>
+          <figure class="shot" data-cat="nails"><img src="images/jackie1.jpeg" alt="Nail set" loading="lazy" /><figcaption>Nails</figcaption></figure>
+          <figure class="shot" data-cat="bridal"><img src="images/jackie3.jpeg" alt="Bridal glam look" loading="lazy" /><figcaption>Bridal</figcaption></figure>
+          <figure class="shot" data-cat="lashes"><img src="images/jackie1.jpeg" alt="Mink lash set" loading="lazy" /><figcaption>Lashes</figcaption></figure>
+        </div>
+
+        <!-- Before / After -->
+        <!-- TODO: use a REAL before + after pair of the same client. The CSS filter on the "before" image is only a demo placeholder. -->
+        <div class="ba-wrap reveal">
+          <div class="ba-copy">
+            <p class="eyebrow">Before &amp; after</p>
+            <h3>Drag to see the transformation</h3>
+            <p>Same client, same light, about an hour in Lisa's chair.</p>
+          </div>
+          <div class="ba" id="beforeAfter" style="--pos: 50%">
+            <img src="images/jackie3.jpeg" alt="After: finished makeup look" class="ba-after" />
+            <img src="images/jackie3.jpeg" alt="Before: bare skin" class="ba-before demo-before" />
+            <span class="ba-label ba-label-l">Before</span>
+            <span class="ba-label ba-label-r">After</span>
+            <div class="ba-handle" aria-hidden="true"><i class="fa-solid fa-arrows-left-right"></i></div>
+            <input type="range" min="0" max="100" value="50" class="ba-range" aria-label="Compare before and after" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ABOUT ===== -->
+    <section class="section" id="about">
+      <div class="container about">
+        <div class="about-img reveal">
+          <!-- TODO: replace with a portrait of Lisa -->
+          <img src="images/jackie1.jpeg" alt="Lisa, founder of Lee's Beauty Studio" loading="lazy" />
+        </div>
+        <div class="about-text reveal" style="--delay: .1s">
+          <p class="eyebrow">Meet the artist</p>
+          <h2>Hi, I'm Lisa.</h2>
+          <p>
+            I believe every woman deserves to feel radiant, confident and uniquely beautiful.
+            I started Lee's Beauty Studio to give my clients a calm, unhurried space where
+            makeup, lashes and nails are done with real care.
+          </p>
+          <p>
+            From brides on their biggest day to a fresh set before the weekend, I take time
+            to understand what you want and create a look that feels like you, only more.
+          </p>
+          <p class="signature">Lisa</p>
+          <ul class="perks">
+            <li><i class="fa-solid fa-check" aria-hidden="true"></i> Hygienic, sanitised tools for every client</li>
+            <li><i class="fa-solid fa-check" aria-hidden="true"></i> Studio or home-service appointments</li>
+            <li><i class="fa-solid fa-check" aria-hidden="true"></i> Bridal trials available</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== REVIEWS ===== -->
+    <!-- TODO: these are PLACEHOLDER reviews. Replace with real client reviews (with permission) before launch. -->
+    <section class="section section-dark" id="reviews">
+      <div class="container">
+        <header class="section-head reveal">
+          <p class="eyebrow">Kind words</p>
+          <h2>What clients say</h2>
+        </header>
+
+        <div class="reviews" tabindex="0" aria-label="Client reviews, scroll sideways">
+          <blockquote class="review">
+            <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+            <p>"Lisa made me feel like a queen on my wedding day. My makeup didn't move once, even through the tears!"</p>
+            <footer><span class="avatar">AM</span> Akosua M. · <em>Bridal</em></footer>
+          </blockquote>
+          <blockquote class="review">
+            <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+            <p>"So professional and kind. My photoshoot makeup was flawless and photographed beautifully."</p>
+            <footer><span class="avatar">LO</span> Linda O. · <em>Glam</em></footer>
+          </blockquote>
+          <blockquote class="review">
+            <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+            <p>"Best lashes I've ever had. Fluffy, light, and they lasted for weeks."</p>
+            <footer><span class="avatar">AK</span> Abena K. · <em>Lashes</em></footer>
+          </blockquote>
+          <blockquote class="review">
+            <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+            <p>"Her attention to detail is incredible. I walked out feeling so confident."</p>
+            <footer><span class="avatar">EB</span> Esi B. · <em>Nails</em></footer>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== BOOKING ===== -->
+    <section class="section" id="book">
+      <div class="container book">
+        <div class="book-intro reveal">
+          <p class="eyebrow">Appointments</p>
+          <h2>Book your appointment</h2>
+          <p>Choose your service and preferred time. Your request opens in WhatsApp, already filled in. Just hit send and Lisa will confirm.</p>
+          <div class="offer">
+            <i class="fa-solid fa-gift" aria-hidden="true"></i>
+            <div><strong>10% off your first visit</strong><span>Mention it when you book.</span></div>
+          </div>
+          <ul class="contact-list">
+            <li><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> <a href="https://wa.me/233507880080" target="_blank" rel="noopener">050 788 0080</a></li>
+            <li><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Accra, Ghana <!-- TODO: studio area / landmark --></li>
+            <!-- TODO: add once Lisa confirms
+            <li><i class="fa-regular fa-envelope" aria-hidden="true"></i> <a href="mailto:hello@leesbeautystudio.com">hello@leesbeautystudio.com</a></li>
+            -->
+          </ul>
+        </div>
+
+        <form class="booking reveal" id="bookingForm" style="--delay: .1s" novalidate>
+          <div class="field">
+            <label for="service">Service</label>
+            <select id="service" name="service" required>
+              <option value="">Choose a service…</option>
+              <option>Bridal Glam</option>
+              <option>Mink Lash Extensions</option>
+              <option>Classic Lashes</option>
+              <option>Nails</option>
+              <option>Pedicure</option>
+              <option>Piercings</option>
+            </select>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="date">Date</label>
+              <input type="date" id="date" name="date" required />
+            </div>
+            <div class="field">
+              <label for="time">Preferred time</label>
+              <select id="time" name="time" required>
+                <option value="">Choose…</option>
+                <option>Morning (8am – 12pm)</option>
+                <option>Afternoon (12pm – 4pm)</option>
+                <option>Evening (4pm – 7pm)</option>
+              </select>
+            </div>
+          </div>
+
+          <fieldset class="field">
+            <legend>Where?</legend>
+            <div class="toggle">
+              <label><input type="radio" name="where" value="At the studio" checked /> <span>At the studio</span></label>
+              <label><input type="radio" name="where" value="Home service" /> <span>Home service</span></label>
+            </div>
+          </fieldset>
+
+          <div class="field" id="areaField" hidden>
+            <label for="area">Your area / location</label>
+            <input type="text" id="area" name="area" placeholder="e.g. East Legon" />
+          </div>
+
+          <div class="field">
+            <label for="name">Your name</label>
+            <input type="text" id="name" name="name" autocomplete="name" required />
+          </div>
+
+          <div class="field">
+            <label for="notes">Anything else? <span class="optional">(optional)</span></label>
+            <textarea id="notes" name="notes" rows="3" placeholder="Occasion, inspiration, number of people…"></textarea>
+          </div>
+
+          <p class="form-error" id="formError" role="alert"></p>
+
+          <button type="submit" class="btn btn-block">
+            <i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Send request on WhatsApp
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <!-- TODO: confirm policies with Lisa -->
+    <section class="section section-tint" id="faq">
+      <div class="container narrow">
+        <header class="section-head reveal">
+          <p class="eyebrow">Good to know</p>
+          <h2>Questions</h2>
+        </header>
+
+        <div class="faq">
+          <details class="reveal">
+            <summary>Do I need to pay a deposit?</summary>
+            <p>A small deposit secures your slot, especially for bridal and weekend bookings. Lisa will share the details when she confirms your appointment.</p>
+          </details>
+          <details class="reveal">
+            <summary>Do you offer home service?</summary>
+            <p>Yes. Lisa can come to you for makeup and lashes. A small transport fee may apply depending on your location.</p>
+          </details>
+          <details class="reveal">
+            <summary>How early should I book for my wedding?</summary>
+            <p>Ideally 2–3 months ahead, with a trial session a few weeks before the big day.</p>
+          </details>
+          <details class="reveal">
+            <summary>How should I prepare for my appointment?</summary>
+            <p>Come with a clean, moisturised face for makeup, and clean natural lashes with no mascara for lash appointments. Inspiration photos are always welcome!</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <p class="wordmark wordmark-light">Lee's <em>Beauty Studio</em></p>
+        <p class="footer-tag">Every face, a canvas.</p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="#services">Services</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#about">About</a>
+        <a href="#book">Book</a>
+      </nav>
+      <div class="socials">
+        <a href="https://wa.me/233507880080" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        <!-- TODO: add Lisa's real handles, then uncomment
+        <a href="https://instagram.com/HANDLE" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://tiktok.com/@HANDLE" target="_blank" rel="noopener" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+        -->
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>© <span id="year">2026</span> Lee's Beauty Studio</p>
+      <p>Website by <a href="mailto:salimsaad135@gmail.com">Salim Saad</a></p>
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp button -->
+  <a href="https://wa.me/233507880080" class="wa-float" target="_blank" rel="noopener" aria-label="Chat with Lisa on WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <!-- Lightbox -->
+  <dialog class="lightbox" id="lightbox" aria-label="Photo viewer">
+    <button class="lb-btn lb-close" data-lb="close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    <button class="lb-btn lb-prev" data-lb="prev" aria-label="Previous photo"><i class="fa-solid fa-chevron-left"></i></button>
+    <img id="lbImg" alt="" />
+    <button class="lb-btn lb-next" data-lb="next" aria-label="Next photo"><i class="fa-solid fa-chevron-right"></i></button>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>
