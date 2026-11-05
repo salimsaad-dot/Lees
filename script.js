@@ -1,5 +1,5 @@
 // Lee's Beauty Studio
-const WHATSAPP_NUMBER = "233507880080"; // international format, no "+" or leading 0
+const WHATSAPP_NUMBER = "233508690377"; // international format, no "+" or leading 0
 
 document.addEventListener("DOMContentLoaded", () => {
   const body = document.body;
