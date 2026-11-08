@@ -67,7 +67,7 @@
     <!-- ===== HERO ===== -->
     <section class="hero" id="home">
       <div class="container hero-inner">
-        <div class="hero-text reveal">
+        <div class="hero-text">
           <p class="eyebrow">Makeup · Lashes · Nails · Accra</p>
           <h1>Every face,<br /><em>a canvas.</em></h1>
           <p class="lead">
@@ -80,7 +80,7 @@
           </div>
         </div>
 
-        <div class="hero-visual reveal" style="--delay: .15s">
+        <div class="hero-visual">
           <!-- TODO: replace with Lisa's own best photo -->
           <div class="arch">
             <img src="images/jackie3.jpeg" alt="Glam makeup look by Lee's Beauty Studio" fetchpriority="high" />
@@ -176,7 +176,7 @@
           <p>Tap any photo to see it up close.</p>
         </header>
 
-        <div class="filters reveal" role="group" aria-label="Filter portfolio">
+        <div class="filters" role="group" aria-label="Filter portfolio">
           <button class="chip is-active" data-filter="all">All</button>
           <button class="chip" data-filter="bridal">Bridal</button>
           <button class="chip" data-filter="glam">Glam</button>
@@ -330,16 +330,22 @@
 
           <fieldset class="field">
             <legend>Where?</legend>
-            <div class="toggle">
-              <label><input type="radio" name="where" value="At the studio" checked /> <span>At the studio</span></label>
-              <label><input type="radio" name="where" value="Home service" /> <span>Home service</span></label>
+            <div>
+              <div class="toggle">
+                <label><input type="radio" name="where" value="At the studio" checked /> <span>At the studio</span></label>
+                <label><input type="radio" name="where" value="Home service" /> <span>Home service</span></label>
+              </div>
+              <!-- Only shown for home service; slides open under the toggle -->
+              <div class="collapse" id="areaField" aria-hidden="true" inert>
+                <div class="collapse-inner">
+                  <div class="field">
+                    <label for="area">Your area / location</label>
+                    <input type="text" id="area" name="area" placeholder="e.g. East Legon" />
+                  </div>
+                </div>
+              </div>
             </div>
           </fieldset>
-
-          <div class="field" id="areaField" hidden>
-            <label for="area">Your area / location</label>
-            <input type="text" id="area" name="area" placeholder="e.g. East Legon" />
-          </div>
 
           <div class="field">
             <label for="name">Your name</label>
@@ -370,19 +376,19 @@
         </header>
 
         <div class="faq">
-          <details class="reveal">
+          <details>
             <summary>Do I need to pay a deposit?</summary>
             <p>A small deposit secures your slot, especially for bridal and weekend bookings. Lisa will share the details when she confirms your appointment.</p>
           </details>
-          <details class="reveal">
+          <details>
             <summary>Do you offer home service?</summary>
             <p>Yes. Lisa can come to you for makeup and lashes. A small transport fee may apply depending on your location.</p>
           </details>
-          <details class="reveal">
+          <details>
             <summary>How early should I book for my wedding?</summary>
             <p>Ideally 2–3 months ahead, with a trial session a few weeks before the big day.</p>
           </details>
-          <details class="reveal">
+          <details>
             <summary>How should I prepare for my appointment?</summary>
             <p>Come with a clean, moisturised face for makeup, and clean natural lashes with no mascara for lash appointments. Inspiration photos are always welcome!</p>
           </details>

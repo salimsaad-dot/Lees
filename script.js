@@ -3,6 +3,8 @@ const WHATSAPP_NUMBER = "233508690377"; // international format, no "+" or leadi
 
 document.addEventListener("DOMContentLoaded", () => {
   const body = document.body;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const EASE = "cubic-bezier(.22, .8, .3, 1)"; // same curve as --ease in style.css
 
   /* ---------- Header: solid background after scrolling ---------- */
   const header = document.getElementById("siteHeader");
@@ -41,11 +43,17 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ---------- Portfolio filter ---------- */
   const chips = document.querySelectorAll(".chip");
   const shots = [...document.querySelectorAll(".shot")];
+  shots.forEach((s, i) => { s.style.viewTransitionName = `shot-${i}`; });
   chips.forEach((chip) => {
     chip.addEventListener("click", () => {
-      chips.forEach((c) => c.classList.toggle("is-active", c === chip));
       const f = chip.dataset.filter;
-      shots.forEach((s) => s.classList.toggle("is-hidden", f !== "all" && s.dataset.cat !== f));
+      const apply = () => {
+        chips.forEach((c) => c.classList.toggle("is-active", c === chip));
+        shots.forEach((s) => s.classList.toggle("is-hidden", f !== "all" && s.dataset.cat !== f));
+      };
+      // Animate the change where supported; otherwise switch instantly as before
+      if (document.startViewTransition && !reduceMotion.matches) document.startViewTransition(apply);
+      else apply();
     });
   });
 
@@ -54,12 +62,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const lbImg = document.getElementById("lbImg");
   let current = 0;
   const visibleShots = () => shots.filter((s) => !s.classList.contains("is-hidden"));
-  const show = (i) => {
+  // dir: 1 = next (new photo slides in from the right), -1 = previous, 0 = no animation
+  let swapId = 0;
+  const show = (i, dir = 0) => {
     const list = visibleShots();
     current = (i + list.length) % list.length;
     const img = list[current].querySelector("img");
-    lbImg.src = img.src;
-    lbImg.alt = img.alt;
+    const set = () => { lbImg.src = img.src; lbImg.alt = img.alt; };
+    if (!dir || reduceMotion.matches || !lbImg.animate) { set(); return; }
+
+    const id = ++swapId; // a newer tap cancels this swap
+    lbImg.getAnimations().forEach((a) => a.cancel());
+    lbImg.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 120, easing: "ease-in", fill: "forwards" }).finished
+      .then(() => { if (id !== swapId) return; set(); return lbImg.decode().catch(() => {}); })
+      .then(() => {
+        if (id !== swapId) return;
+        lbImg.getAnimations().forEach((a) => a.cancel());
+        lbImg.animate(
+          [{ opacity: 0, transform: `translateX(${dir * 12}px)` }, { opacity: 1, transform: "none" }],
+          { duration: 220, easing: EASE }
+        );
+      })
+      .catch(() => {}); // cancelled by a newer swap
   };
   shots.forEach((s) => {
     s.tabIndex = 0;
@@ -71,12 +95,12 @@ document.addEventListener("DOMContentLoaded", () => {
   lb.addEventListener("click", (e) => {
     const action = e.target.closest("[data-lb]")?.dataset.lb;
     if (action === "close" || e.target === lb) lb.close();
-    if (action === "prev") show(current - 1);
-    if (action === "next") show(current + 1);
+    if (action === "prev") show(current - 1, -1);
+    if (action === "next") show(current + 1, 1);
   });
   lb.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowLeft") show(current - 1);
-    if (e.key === "ArrowRight") show(current + 1);
+    if (e.key === "ArrowLeft") show(current - 1, -1);
+    if (e.key === "ArrowRight") show(current + 1, 1);
   });
   // Swipe on phones
   let touchX = null;
@@ -84,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
   lb.addEventListener("touchend", (e) => {
     if (touchX === null) return;
     const dx = e.changedTouches[0].clientX - touchX;
-    if (Math.abs(dx) > 50) show(current + (dx < 0 ? 1 : -1));
+    if (Math.abs(dx) > 50) { const dir = dx < 0 ? 1 : -1; show(current + dir, dir); }
     touchX = null;
   });
 
@@ -92,7 +116,43 @@ document.addEventListener("DOMContentLoaded", () => {
   const ba = document.getElementById("beforeAfter");
   if (ba) {
     const range = ba.querySelector(".ba-range");
-    range.addEventListener("input", () => ba.style.setProperty("--pos", range.value + "%"));
+    const setPos = (v) => ba.style.setProperty("--pos", v + "%");
+    range.addEventListener("input", () => setPos(range.value));
+
+    // The first time the slider is properly in view, sweep it once (50 → 30 → 70 → 50)
+    // so visitors see it can be dragged. Stops as soon as they touch it.
+    if (!reduceMotion.matches && "IntersectionObserver" in window) {
+      let raf = 0, stopped = false;
+      const stop = () => { stopped = true; cancelAnimationFrame(raf); };
+      ["pointerdown", "touchstart", "keydown"].forEach((ev) =>
+        ba.addEventListener(ev, stop, { once: true, passive: true }));
+
+      const sweep = () => {
+        const keys = [50, 30, 70, 50];
+        const seg = 1400 / 3; // ms per leg
+        const ease = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+        let t0 = null;
+        const step = (now) => {
+          if (stopped) return;
+          if (t0 === null) t0 = now;
+          const elapsed = now - t0;
+          const leg = Math.min(Math.floor(elapsed / seg), 2);
+          const t = Math.min((elapsed - leg * seg) / seg, 1);
+          const v = keys[leg] + (keys[leg + 1] - keys[leg]) * ease(t);
+          setPos(v); range.value = v;
+          if (elapsed < seg * 3) raf = requestAnimationFrame(step);
+          else { setPos(50); range.value = 50; }
+        };
+        raf = requestAnimationFrame(step);
+      };
+
+      const io = new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting) return;
+        io.disconnect();
+        setTimeout(() => { if (!stopped) sweep(); }, 500); // let the section's fade-in finish first
+      }, { threshold: 0.6 });
+      io.observe(ba);
+    }
   }
 
   /* ---------- Booking form → WhatsApp ---------- */
@@ -117,8 +177,11 @@ document.addEventListener("DOMContentLoaded", () => {
   form.querySelectorAll('input[name="where"]').forEach((r) => {
     r.addEventListener("change", () => {
       const home = form.where.value === "Home service";
-      areaField.hidden = !home;
+      areaField.classList.toggle("is-open", home);
+      areaField.inert = !home;
+      areaField.setAttribute("aria-hidden", String(!home));
       areaInput.required = home;
+      if (!home) areaInput.classList.remove("invalid");
     });
   });
 

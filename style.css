@@ -71,11 +71,16 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
   display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
   padding: .95rem 1.7rem; border-radius: 999px; border: 1px solid var(--ink);
   background: var(--ink); color: #fff; text-decoration: none; font-weight: 600; font-size: .95rem;
-  cursor: pointer; transition: background .3s var(--ease), color .3s var(--ease), transform .3s var(--ease), box-shadow .3s var(--ease);
+  cursor: pointer; transition: background .3s var(--ease), color .3s var(--ease), transform .3s var(--ease), box-shadow .3s var(--ease), scale .12s var(--ease);
 }
-.btn:hover { background: var(--accent-deep); border-color: var(--accent-deep); transform: translateY(-2px); box-shadow: var(--shadow); }
 .btn-ghost { background: transparent; color: var(--ink); }
-.btn-ghost:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+/* Hover effects only on devices with a real mouse/trackpad, so they don't "stick" after a tap on phones */
+@media (hover: hover) {
+  .btn:hover { background: var(--accent-deep); border-color: var(--accent-deep); transform: translateY(-2px); box-shadow: var(--shadow); }
+  .btn-ghost:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+}
+/* Tap feedback: buttons give slightly under the thumb (uses `scale` so it combines with any transform) */
+.btn:active, .chip:active, .wa-float:active, .lb-btn:active, .toggle label:active span { scale: .97; }
 .btn-small { padding: .6rem 1.2rem; font-size: .88rem; }
 .btn-block { width: 100%; padding-block: 1.1rem; }
 
@@ -84,7 +89,7 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
   display: inline-flex; align-items: center; gap: .4rem;
 }
 .link-arrow i { transition: transform .3s var(--ease); }
-.link-arrow:hover i { transform: translateX(4px); }
+@media (hover: hover) { .link-arrow:hover i { transform: translateX(4px); } }
 
 /* ---------- Header ---------- */
 .site-header {
@@ -149,13 +154,23 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
   aspect-ratio: 4 / 5; border-radius: 999px 999px var(--radius) var(--radius); overflow: hidden;
   box-shadow: var(--shadow); outline: 1px solid var(--accent-light); outline-offset: 12px;
 }
-.arch img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
-.hero-visual:hover .arch img { transform: scale(1.04); }
+.arch img {
+  width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease);
+  /* Signature entrance: the photo rises up inside its arch frame */
+  animation: arch-in .8s var(--ease) .1s backwards;
+}
+@keyframes arch-in {
+  from { clip-path: inset(100% 0 0 0); transform: scale(1.06); }
+  to   { clip-path: inset(0 0 0 0);    transform: scale(1); }
+}
+@media (hover: hover) { .hero-visual:hover .arch img { transform: scale(1.04); } }
 .hero-badge {
   position: absolute; left: -1.5rem; bottom: 2.5rem; display: flex; align-items: center; gap: .75rem;
   background: var(--surface); padding: .9rem 1.2rem; border-radius: 14px; box-shadow: var(--shadow);
   font-size: .82rem; font-weight: 600; line-height: 1.3;
+  animation: badge-in .5s var(--ease) .65s backwards;
 }
+@keyframes badge-in { from { opacity: 0; translate: 0 8px; } }
 .hero-badge i { color: var(--accent); font-size: 1.2rem; }
 
 /* ---------- Sections ---------- */
@@ -175,7 +190,9 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
   padding: 2rem; display: flex; flex-direction: column;
   transition: transform .4s var(--ease), box-shadow .4s var(--ease), border-color .4s var(--ease);
 }
-.service:hover { transform: translateY(-6px); box-shadow: var(--shadow); border-color: var(--accent-light); }
+@media (hover: hover) {
+  .service:hover { transform: translateY(-6px); box-shadow: var(--shadow); border-color: var(--accent-light); }
+}
 .service-icon {
   width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center;
   background: var(--tint); color: var(--accent-deep); font-size: 1.15rem; margin-bottom: 1.4rem;
@@ -193,26 +210,37 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
 .chip {
   border: 1px solid var(--line); background: var(--surface); padding: .55rem 1.2rem;
   border-radius: 999px; font-size: .88rem; font-weight: 500; cursor: pointer;
-  transition: all .3s var(--ease);
+  transition: background .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease), scale .12s var(--ease);
 }
-.chip:hover { border-color: var(--ink); }
+@media (hover: hover) { .chip:hover { border-color: var(--ink); } }
 .chip.is-active { background: var(--ink); color: #fff; border-color: var(--ink); }
 
 .gallery { display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 260px; grid-auto-flow: dense; gap: 1rem; }
 .shot {
   position: relative; overflow: hidden; border-radius: var(--radius); cursor: zoom-in;
-  animation: pop .5s var(--ease);
+  view-transition-class: shot;
 }
-@keyframes pop { from { opacity: 0; transform: scale(.96); } }
+/* Filter: leaving photos fade out, staying photos glide to their new spot (View Transitions) */
+::view-transition-group(.shot) { animation-duration: .3s; animation-timing-function: var(--ease); }
+::view-transition-old(.shot):only-child { animation: shot-out .2s ease-in both; }
+::view-transition-new(.shot):only-child { animation: shot-in .3s var(--ease) both; }
+@keyframes shot-out { to { opacity: 0; transform: scale(.92); } }
+@keyframes shot-in { from { opacity: 0; transform: scale(.96); } }
 .shot.tall { grid-row: span 2; }
 .shot img { width: 100%; height: 100%; object-fit: cover; transition: transform .8s var(--ease); }
-.shot:hover img { transform: scale(1.06); }
 .shot figcaption {
   position: absolute; left: 1rem; bottom: 1rem; padding: .35rem .85rem; border-radius: 999px;
   background: rgba(255, 255, 255, .9); font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
-  opacity: 0; transform: translateY(8px); transition: all .4s var(--ease);
+  opacity: 0; transform: translateY(8px); transition: opacity .4s var(--ease), transform .4s var(--ease);
 }
-.shot:hover figcaption { opacity: 1; transform: none; }
+@media (hover: hover) {
+  .shot:hover img { transform: scale(1.06); }
+  .shot:hover figcaption { opacity: 1; transform: none; }
+}
+/* Phones can't hover, so show the category label at rest */
+@media (hover: none) {
+  .shot figcaption { opacity: 1; transform: none; left: .6rem; bottom: .6rem; font-size: .68rem; padding: .3rem .7rem; }
+}
 .shot.is-hidden { display: none; }
 
 /* Before / After */
@@ -299,7 +327,23 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
   padding: clamp(1.5rem, 4vw, 2.5rem); box-shadow: var(--shadow); display: grid; gap: 1.2rem;
 }
 .field { display: grid; gap: .45rem; border: 0; min-width: 0; }
-.field[hidden] { display: none; }
+
+/* "Your area" field: slides open under the Where? toggle instead of popping in */
+.collapse {
+  display: grid; grid-template-rows: 0fr; opacity: 0;
+  transition: grid-template-rows .15s ease-in, opacity .15s ease-in;
+}
+.collapse.is-open {
+  grid-template-rows: 1fr; opacity: 1;
+  transition: grid-template-rows .22s var(--ease), opacity .22s var(--ease);
+}
+.collapse-inner { min-height: 0; overflow: hidden; margin-inline: -4px; padding-inline: 4px; }
+.collapse .field {
+  /* top padding = spacing under the toggle (collapses with the field); 4px bottom = room for the focus glow */
+  padding: 1.2rem 0 4px;
+  transform: translateY(-6px); transition: transform .22s var(--ease);
+}
+.collapse.is-open .field { transform: none; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .field label, .field legend { font-size: .82rem; font-weight: 600; color: var(--ink-soft); }
 .field legend { margin-bottom: .45rem; }
@@ -319,16 +363,18 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
 .toggle input { position: absolute; opacity: 0; pointer-events: none; }
 .toggle span {
   display: block; text-align: center; padding: .8rem; border: 1px solid var(--line); border-radius: 12px;
-  font-size: .92rem; font-weight: 500; background: var(--bg); transition: all .25s var(--ease);
+  font-size: .92rem; font-weight: 500; background: var(--bg);
+  transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease), scale .12s var(--ease);
 }
 .toggle input:checked + span { background: var(--ink); color: #fff; border-color: var(--ink); }
 .toggle input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-.form-error { color: #b03a2e; font-size: .88rem; }
+.form-error { color: #b03a2e; font-size: .88rem; transition: opacity .15s var(--ease), translate .15s var(--ease); }
 .form-error:empty { display: none; }
+@starting-style { .form-error { opacity: 0; translate: 0 -4px; } } /* fades in when the message appears */
 
 /* ---------- FAQ ---------- */
-.faq { display: grid; gap: .8rem; }
+.faq { display: grid; gap: .8rem; interpolate-size: allow-keywords; }
 .faq details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
 .faq summary {
   list-style: none; cursor: pointer; padding: 1.3rem 1.5rem; font-weight: 600;
@@ -337,7 +383,17 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
 .faq summary::-webkit-details-marker { display: none; }
 .faq summary::after { content: "+"; font-size: 1.5rem; font-weight: 300; color: var(--accent); transition: transform .3s var(--ease); }
 .faq details[open] summary::after { transform: rotate(45deg); }
-.faq details p { padding: 0 1.5rem 1.4rem; color: var(--muted); }
+.faq details p {
+  padding: 0 1.5rem 1.4rem; color: var(--muted);
+  opacity: 0; transform: translateY(-4px); transition: opacity .28s var(--ease), transform .28s var(--ease);
+}
+.faq details[open] p { opacity: 1; transform: none; }
+/* Smooth open/close where supported (Chrome/Edge/Android); other browsers open instantly as before */
+.faq details::details-content {
+  height: 0; overflow: clip;
+  transition: height .28s var(--ease), content-visibility .28s allow-discrete;
+}
+.faq details[open]::details-content { height: auto; }
 
 /* ---------- Footer ---------- */
 .site-footer { background: var(--ink); color: #c9bbb1; padding: 4rem 0 2rem; }
@@ -349,7 +405,8 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
 .socials { display: flex; gap: .6rem; }
 .socials a {
   width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center;
-  border: 1px solid rgba(255, 255, 255, .18); text-decoration: none; transition: all .3s var(--ease);
+  border: 1px solid rgba(255, 255, 255, .18); text-decoration: none;
+  transition: background .3s var(--ease), border-color .3s var(--ease), color .3s var(--ease);
 }
 .socials a:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
 .footer-bottom {
@@ -364,12 +421,13 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
   width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center;
   background: var(--wa); color: #fff; font-size: 1.8rem; text-decoration: none;
   box-shadow: 0 10px 25px -8px rgba(37, 211, 102, .6);
-  transition: transform .3s var(--ease);
+  transition: transform .3s var(--ease), scale .12s var(--ease);
 }
-.wa-float:hover { transform: scale(1.08); }
+@media (hover: hover) { .wa-float:hover { transform: scale(1.08); } }
+/* Two gentle pings shortly after the page loads, then the ring rests */
 .wa-float::before {
   content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--wa);
-  animation: ping 2.4s var(--ease) infinite;
+  opacity: 0; animation: ping 2.4s var(--ease) 2.5s 2;
 }
 @keyframes ping { 0% { transform: scale(1); opacity: .7; } 100% { transform: scale(1.6); opacity: 0; } }
 
@@ -377,13 +435,29 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
 .lightbox {
   border: 0; padding: 0; background: transparent; max-width: 100vw; max-height: 100vh;
   width: 100%; height: 100%; margin: 0;
+  /* exit: a quick, quiet fade */
+  opacity: 0;
+  transition: opacity .16s ease-out, display .24s allow-discrete, overlay .24s allow-discrete;
 }
-.lightbox[open] { display: grid; place-items: center; }
-.lightbox::backdrop { background: rgba(20, 14, 12, .92); }
-.lightbox img { max-width: min(92vw, 900px); max-height: 85vh; border-radius: 12px; object-fit: contain; }
+.lightbox[open] { display: grid; place-items: center; opacity: 1; transition-duration: .24s; }
+.lightbox::backdrop {
+  background: rgba(20, 14, 12, 0);
+  transition: background-color .16s ease-out, display .24s allow-discrete, overlay .24s allow-discrete;
+}
+.lightbox[open]::backdrop { background: rgba(20, 14, 12, .92); transition-duration: .24s; }
+.lightbox img {
+  max-width: min(92vw, 900px); max-height: 85vh; border-radius: 12px; object-fit: contain;
+  transition: transform .24s var(--ease);
+}
+/* enter: backdrop fades in, photo settles from 96% to full size */
+@starting-style {
+  .lightbox[open] { opacity: 0; }
+  .lightbox[open]::backdrop { background: rgba(20, 14, 12, 0); }
+  .lightbox[open] img { transform: scale(.96); }
+}
 .lb-btn {
   position: fixed; width: 48px; height: 48px; border-radius: 50%; border: 0; cursor: pointer;
-  background: rgba(255, 255, 255, .12); color: #fff; font-size: 1.1rem; transition: background .25s;
+  background: rgba(255, 255, 255, .12); color: #fff; font-size: 1.1rem; transition: background .25s, scale .12s var(--ease);
 }
 .lb-btn:hover { background: rgba(255, 255, 255, .25); }
 .lb-close { top: 1.25rem; right: 1.25rem; }
@@ -391,8 +465,9 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
 .lb-next { right: 1.25rem; top: 50%; transform: translateY(-50%); }
 
 /* ---------- Reveal on scroll ---------- */
-.js .reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s var(--ease) var(--delay, 0s), transform .9s var(--ease) var(--delay, 0s); }
-.js .reveal.in { opacity: 1; transform: none; }
+/* Uses `translate` (not `transform`) so it doesn't cancel hover lifts like .service:hover */
+.js .reveal { opacity: 0; translate: 0 16px; transition: opacity .6s var(--ease) var(--delay, 0s), translate .6s var(--ease) var(--delay, 0s); }
+.js .reveal.in { opacity: 1; translate: none; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 960px) {
@@ -410,6 +485,15 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
   .nav .btn { margin-top: 1rem; padding: 1rem 2rem; font-size: 1rem; }
   .menu-open .nav { opacity: 1; visibility: visible; }
   .menu-open { overflow: hidden; }
+  /* Menu links arrive one after another (40ms apart); on close they fade out together */
+  .nav > * { opacity: 0; translate: 0 8px; transition: opacity .3s var(--ease), translate .3s var(--ease); }
+  .menu-open .nav > * { opacity: 1; translate: none; }
+  .menu-open .nav > :nth-child(1) { transition-delay: .06s; }
+  .menu-open .nav > :nth-child(2) { transition-delay: .10s; }
+  .menu-open .nav > :nth-child(3) { transition-delay: .14s; }
+  .menu-open .nav > :nth-child(4) { transition-delay: .18s; }
+  .menu-open .nav > :nth-child(5) { transition-delay: .22s; }
+  .menu-open .nav > :nth-child(6) { transition-delay: .26s; }
 
   .hero-inner, .about, .book { grid-template-columns: 1fr; }
   .hero-inner { gap: 3rem; }
@@ -437,6 +521,8 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
-  .js .reveal { opacity: 1; transform: none; }
+  *, *::before, *::after, ::backdrop { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+  .faq details::details-content { transition: none !important; } /* own rule: unsupported browsers would drop a shared one */
+  .js .reveal { opacity: 1; translate: none; }
 }
