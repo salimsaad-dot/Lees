@@ -54,7 +54,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 /* ---------- Type ---------- */
-h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.05; letter-spacing: -.01em; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.05; letter-spacing: -.01em; text-wrap: balance; }
+::selection { background: var(--accent-light); color: var(--ink); } /* themed text highlight */
 h1 { font-size: clamp(3rem, 7.5vw, 5.6rem); }
 h2 { font-size: clamp(2.3rem, 5vw, 3.5rem); }
 h3 { font-size: 1.6rem; }
