@@ -296,6 +296,10 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
   overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 1rem; scrollbar-width: thin;
   scrollbar-color: var(--accent) transparent;
 }
+/* Wide screens: show every review (2 × 2) instead of a row whose last card is cut off with no scroll hint */
+@media (min-width: 821px) {
+  .reviews { grid-auto-flow: row; grid-template-columns: repeat(2, 1fr); overflow: visible; padding-bottom: 0; }
+}
 .review {
   scroll-snap-align: start; border: 1px solid rgba(255, 255, 255, .12); border-radius: var(--radius);
   padding: 2rem; display: flex; flex-direction: column; gap: 1.2rem; background: rgba(255, 255, 255, .03);
