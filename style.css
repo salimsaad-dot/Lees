@@ -62,7 +62,7 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
 
 .eyebrow {
   font-size: .75rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase;
-  color: var(--accent); margin-bottom: 1rem;
+  color: var(--accent-deep); margin-bottom: 1rem; /* deeper gold: 5.6:1 on cream (was 3.6:1, below the 4.5:1 minimum) */
 }
 .lead { font-size: 1.12rem; color: var(--muted); max-width: 34rem; }
 
