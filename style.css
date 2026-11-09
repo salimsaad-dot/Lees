@@ -356,6 +356,13 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
   outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(168, 119, 92, .15);
 }
 .field .invalid { border-color: #c0392b; }
+/* iPhone Safari: date inputs ignore width:100% (poke out of the form) and centre their text */
+.field input[type="date"] {
+  -webkit-appearance: none; appearance: none; display: block; min-width: 0;
+  min-height: calc(1.65em + 1.7rem + 2px); /* same height as the other fields, even when empty */
+  text-align: left;
+}
+.field input[type="date"]::-webkit-date-and-time-value { text-align: left; margin: 0; }
 .field textarea { resize: vertical; }
 
 .toggle { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
