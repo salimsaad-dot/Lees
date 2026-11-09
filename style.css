@@ -87,6 +87,7 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
 .link-arrow {
   font-weight: 600; font-size: .9rem; text-decoration: none; color: var(--accent-deep);
   display: inline-flex; align-items: center; gap: .4rem;
+  min-height: 44px; padding-inline: .5rem; margin-inline: -.5rem; /* 44px tap area without moving the layout */
 }
 .link-arrow i { transition: transform .3s var(--ease); }
 @media (hover: hover) { .link-arrow:hover i { transform: translateX(4px); } }
@@ -321,7 +322,7 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
 .contact-list { list-style: none; display: grid; gap: .8rem; }
 .contact-list li { display: flex; gap: .8rem; align-items: center; }
 .contact-list i { width: 20px; color: var(--accent); }
-.contact-list a { text-decoration: none; font-weight: 600; }
+.contact-list a { text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; min-height: 44px; }
 .contact-list a:hover { color: var(--accent-deep); }
 
 .booking {
@@ -408,12 +409,12 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
 .site-footer { background: var(--ink); color: #c9bbb1; padding: 4rem 0 2rem; }
 .footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 2rem; }
 .footer-tag { font-family: var(--serif); font-style: italic; font-size: 1.1rem; margin-top: .3rem; }
-.footer-nav { display: flex; flex-wrap: wrap; gap: 1.6rem; }
-.footer-nav a { text-decoration: none; font-size: .92rem; }
+.footer-nav { display: flex; flex-wrap: wrap; column-gap: 1.6rem; }
+.footer-nav a { text-decoration: none; font-size: .92rem; display: inline-flex; align-items: center; min-height: 44px; }
 .footer-nav a:hover { color: #fff; }
 .socials { display: flex; gap: .6rem; }
 .socials a {
-  width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center;
+  width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
   border: 1px solid rgba(255, 255, 255, .18); text-decoration: none;
   transition: background .3s var(--ease), border-color .3s var(--ease), color .3s var(--ease);
 }
