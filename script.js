@@ -1,6 +1,19 @@
 // Lee's Beauty Studio
 const WHATSAPP_NUMBER = "233508690377"; // international format, no "+" or leading 0
 
+// Photos fade in once downloaded (no pop-in on slow mobile data). Already-cached ones show at once.
+document.querySelectorAll(".fade-img, .arch-img").forEach((img) => {
+  const show = () => img.classList.add("loaded");
+  if (img.complete) {
+    img.style.transition = "none";
+    show();
+    requestAnimationFrame(() => requestAnimationFrame(() => (img.style.transition = "")));
+  } else {
+    img.addEventListener("load", show, { once: true });
+    img.addEventListener("error", show, { once: true });
+  }
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   const body = document.body;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
