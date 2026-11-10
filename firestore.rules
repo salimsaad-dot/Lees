@@ -1,0 +1,70 @@
+rules_version = '2';
+// Lee's Beauty Studio · who may read/write what.
+// Paste into Firebase console → Firestore Database → Rules → Publish.
+//
+// slots/{date_HHMM}     public: which times are taken (no personal details)
+// bookings/{date_HHMM}  private: client name, number, notes (Lisa only)
+// admins/{uid}          an (empty) doc here makes that login an admin
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function shortText(v, min, max) {
+      return v is string && v.size() >= min && v.size() <= max;
+    }
+
+    // slot id must match its own date/time, e.g. 2026-11-14_1000 ↔ "2026-11-14" + "10:00"
+    function validSlot(id, d) {
+      return d.keys().hasOnly(['date', 'time', 'kind', 'start', 'createdAt'])
+        && d.date is string && d.date.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+        && d.time is string && d.time.matches('^[0-9]{2}:[0-9]{2}$')
+        && id == d.date + '_' + d.time.replace(':', '')
+        && d.start is timestamp
+        && d.createdAt == request.time;
+    }
+
+    match /slots/{id} {
+      allow read: if true;
+      // Public booking: only new slots (an existing slot can't be overwritten,
+      // that would be an "update"), in the future, within ~3 months,
+      // and only together with its booking details.
+      allow create: if validSlot(id, request.resource.data)
+        && (
+          isAdmin()
+          || (request.resource.data.kind == 'booked'
+              && request.resource.data.start > request.time
+              && request.resource.data.start < request.time + duration.value(92, 'd')
+              && existsAfter(/databases/$(database)/documents/bookings/$(id)))
+        )
+        && request.resource.data.kind in ['booked', 'blocked'];
+      allow delete: if isAdmin();
+      allow update: if false;
+    }
+
+    match /bookings/{id} {
+      allow read, delete: if isAdmin();
+      allow create: if !exists(/databases/$(database)/documents/slots/$(id))
+        && getAfter(/databases/$(database)/documents/slots/$(id)).data.kind == 'booked'
+        && request.resource.data.keys().hasOnly(['date', 'time', 'service', 'where', 'area', 'name', 'phone', 'notes', 'createdAt'])
+        && request.resource.data.keys().hasAll(['date', 'time', 'service', 'where', 'name', 'phone', 'createdAt'])
+        && id == request.resource.data.date + '_' + request.resource.data.time.replace(':', '')
+        && shortText(request.resource.data['service'], 1, 60)
+        && shortText(request.resource.data['where'], 1, 30)
+        && shortText(request.resource.data.get('area', ''), 0, 100)
+        && shortText(request.resource.data.name, 1, 80)
+        && shortText(request.resource.data.phone, 6, 25)
+        && shortText(request.resource.data.get('notes', ''), 0, 600)
+        && request.resource.data.createdAt == request.time;
+      allow update: if false;
+    }
+
+    match /admins/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false; // added by hand in the Firebase console
+    }
+  }
+}

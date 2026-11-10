@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lee's Beauty Studio | Makeup, Lashes &amp; Nails by Lisa</title>
-  <meta name="description" content="Lee's Beauty Studio: bridal and glam makeup, lash extensions, nails, pedicures and piercings by Lisa. Studio and home-service appointments. Book on WhatsApp." />
+  <meta name="description" content="Lee's Beauty Studio: bridal and glam makeup, lash extensions, nails, pedicures and piercings by Lisa. Studio and home-service appointments. Book your time online." />
 
   <!-- Social share preview (WhatsApp / Instagram / Facebook) -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Lee's Beauty Studio | Every Face, a Canvas" />
-  <meta property="og:description" content="Bridal and glam makeup, lashes, nails and more by Lisa. Book your appointment on WhatsApp." />
+  <meta property="og:description" content="Bridal and glam makeup, lashes, nails and more by Lisa. Choose an open time and book online." />
   <meta property="og:url" content="https://salimsaad-dot.github.io/Lees/" />
   <meta property="og:image" content="https://salimsaad-dot.github.io/Lees/images/og-image.jpg" />
   <meta property="og:image:width" content="1200" />
@@ -277,7 +277,7 @@
       <div class="container book">
         <div class="book-intro reveal">
           <h2>Book your appointment</h2>
-          <p>Choose your service and preferred time. Your request opens in WhatsApp, already filled in. Just hit send and Lisa will confirm.</p>
+          <p>Pick your service, then choose from the times that are still free. Once you book, that time is yours. Nobody else can take it.</p>
           <div class="offer">
             <i class="fa-solid fa-gift" aria-hidden="true"></i>
             <div><strong>10% off your first visit</strong><span>Mention it when you book.</span></div>
@@ -305,21 +305,17 @@
             </select>
           </div>
 
-          <div class="field-row">
-            <div class="field">
-              <label for="date">Date</label>
-              <input type="date" id="date" name="date" required />
-            </div>
-            <div class="field">
-              <label for="time">Preferred time</label>
-              <select id="time" name="time" required>
-                <option value="">Choose…</option>
-                <option>Morning (8am – 12pm)</option>
-                <option>Afternoon (12pm – 4pm)</option>
-                <option>Evening (4pm – 7pm)</option>
-              </select>
-            </div>
+          <div class="field">
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date" required />
           </div>
+
+          <fieldset class="field" id="timeField">
+            <legend>Time</legend>
+            <div class="slots" id="slots" aria-live="polite">
+              <p class="slots-note">Pick a date to see the free times.</p>
+            </div>
+          </fieldset>
 
           <fieldset class="field">
             <legend>Where?</legend>
@@ -340,22 +336,38 @@
             </div>
           </fieldset>
 
-          <div class="field">
-            <label for="name">Your name</label>
-            <input type="text" id="name" name="name" autocomplete="name" required />
+          <div class="field-row">
+            <div class="field">
+              <label for="name">Your name</label>
+              <input type="text" id="name" name="name" autocomplete="name" maxlength="80" required />
+            </div>
+            <div class="field">
+              <label for="phone">WhatsApp number</label>
+              <input type="tel" id="phone" name="phone" autocomplete="tel" inputmode="tel" placeholder="e.g. 024 123 4567" maxlength="25" required />
+            </div>
           </div>
 
           <div class="field">
             <label for="notes">Anything else? <span class="optional">(optional)</span></label>
-            <textarea id="notes" name="notes" rows="3" placeholder="Occasion, inspiration, number of people…"></textarea>
+            <textarea id="notes" name="notes" rows="3" maxlength="600" placeholder="Occasion, inspiration, number of people…"></textarea>
           </div>
 
           <p class="form-error" id="formError" role="alert"></p>
 
-          <button type="submit" class="btn btn-block">
-            <i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Send request on WhatsApp
-          </button>
+          <button type="submit" class="btn btn-block" id="bookBtn">Book this time</button>
         </form>
+
+        <!-- Shown after a successful booking (replaces the form) -->
+        <div class="booking booked" id="booked" tabindex="-1" hidden>
+          <i class="fa-solid fa-circle-check booked-icon" aria-hidden="true"></i>
+          <h3>You're booked!</h3>
+          <p class="booked-when" id="bookedWhen"></p>
+          <p>Your time is saved. Send Lisa your details on WhatsApp so she can say hello and confirm.</p>
+          <a class="btn btn-block" id="bookedWa" href="https://wa.me/233508690377" target="_blank" rel="noopener">
+            <i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Send my details to Lisa
+          </a>
+          <button type="button" class="btn btn-ghost btn-block" id="bookAgain">Book another appointment</button>
+        </div>
       </div>
     </section>
 
@@ -431,5 +443,6 @@
   </dialog>
 
   <script src="script.js"></script>
+  <script type="module" src="booking.js"></script>
 </body>
 </html>

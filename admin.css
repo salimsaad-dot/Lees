@@ -1,0 +1,51 @@
+/* Lisa's bookings page: reuses the site's tokens, buttons and fields from style.css */
+.admin { background: var(--bg); min-height: 100vh; }
+.admin-bar {
+  position: sticky; top: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; padding: .75rem max(16px, calc((100% - 760px) / 2)); background: var(--surface); border-bottom: 1px solid var(--line);
+}
+.admin-logo { font-family: var(--serif); font-size: 1.35rem; font-weight: 600; text-decoration: none; color: var(--ink); min-height: 44px; display: inline-flex; align-items: center; gap: .3em; }
+.admin-logo em { color: var(--accent); }
+.admin-main { max-width: 760px; margin: 0 auto; padding: 1.5rem 16px 4rem; display: grid; gap: 2rem; }
+.admin h1 { font-size: clamp(2rem, 6vw, 2.6rem); }
+.admin h2 { font-size: 1.8rem; }
+.admin-msg { color: var(--muted); }
+.admin-msg:empty { display: none; }
+.admin-card { max-width: 30rem; width: 100%; margin-inline: auto; }
+.admin-section.admin-card { max-width: none; }
+.admin-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.admin-count { color: var(--muted); font-weight: 600; }
+.admin-hint { color: var(--muted); font-size: .92rem; }
+.admin-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+.link-btn { background: none; border: 0; color: var(--accent-deep); font-weight: 600; cursor: pointer; min-height: 44px; justify-self: center; }
+
+.day { margin-top: 1.6rem; }
+.day:first-child { margin-top: 0; }
+.day h3 { font-family: var(--sans); font-size: .82rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-deep); margin-bottom: .6rem; }
+.day.is-today h3::after { content: " · Today"; color: var(--ink); }
+.appt {
+  display: grid; grid-template-columns: 5.2rem 1fr; gap: .2rem 1rem; padding: 1rem 1.1rem; margin-bottom: .6rem;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+}
+.appt-time { font-weight: 700; font-variant-numeric: tabular-nums; grid-row: span 3; padding-top: .1rem; }
+.appt-main { display: grid; gap: .25rem; min-width: 0; }
+.appt-title { font-weight: 700; }
+.appt-meta { color: var(--muted); font-size: .9rem; overflow-wrap: anywhere; }
+.appt-notes { font-size: .9rem; color: var(--ink-soft); background: var(--bg); border-radius: 8px; padding: .5rem .7rem; overflow-wrap: anywhere; }
+.appt-actions { display: flex; flex-wrap: wrap; gap: .4rem .9rem; margin-top: .3rem; }
+.appt-actions a, .appt-actions button {
+  display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; font-weight: 600; font-size: .9rem;
+  color: var(--accent-deep); text-decoration: none; background: none; border: 0; padding: 0; cursor: pointer;
+}
+.appt-actions .danger { color: #b03a2e; }
+.appt.is-blocked { background: transparent; border-style: dashed; }
+.appt.is-blocked .appt-title { color: var(--muted); }
+.empty { color: var(--muted); padding: 1.2rem; border: 1px dashed var(--line); border-radius: 14px; text-align: center; }
+
+/* Block-time picker: checkboxes styled like the booking slots */
+#blockSlots .slot input:checked + span { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+@media (max-width: 420px) {
+  .appt { grid-template-columns: 1fr; }
+  .appt-time { grid-row: auto; }
+}

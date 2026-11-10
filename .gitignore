@@ -2,3 +2,5 @@ _old-version/
 .vscode/
 system.md
 motion-audits/
+*-debug.log
+.firebase/

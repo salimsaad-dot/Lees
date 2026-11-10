@@ -380,6 +380,43 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
 .toggle input:checked + span { background: var(--ink); color: #fff; border-color: var(--ink); }
 .toggle input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
 
+/* Time slots: only free times can be picked; taken ones stay visible but greyed out */
+.slots { min-height: 3.2rem; border-radius: 12px; }
+.slots.invalid { outline: 1px solid #c0392b; outline-offset: 4px; }
+.slots-note { font-size: .9rem; color: var(--muted); padding: .85rem 1rem; border: 1px dashed var(--line); border-radius: 12px; }
+.slots[aria-busy="true"] .slots-note { animation: slots-wait 1.2s ease-in-out infinite alternate; }
+@keyframes slots-wait { to { opacity: .45; } }
+.slot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr)); gap: .6rem; }
+.slot-grid > .slots-note { grid-column: 1 / -1; }
+@media (max-width: 560px) { .slot-grid { grid-template-columns: repeat(3, 1fr); gap: .5rem; } }
+.slot { cursor: pointer; position: relative; }
+.slot input { position: absolute; opacity: 0; pointer-events: none; }
+.slot span {
+  display: grid; place-content: center; min-height: 48px; padding: .55rem .4rem; text-align: center;
+  border: 1px solid var(--line); border-radius: 12px; background: var(--bg); font-size: .92rem; font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease), scale .12s var(--ease);
+}
+.slot small { font-size: .7rem; font-weight: 500; color: var(--muted); }
+.slot input:checked + span { background: var(--ink); color: #fff; border-color: var(--ink); }
+.slot input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+.slot.is-off { cursor: not-allowed; }
+.slot.is-off span { color: #9a8b83; background: transparent; border-style: dashed; }
+.slot.is-off small { display: block; }
+@media (hover: hover) { .slot:not(.is-off):hover span { border-color: var(--accent); } }
+.slot:not(.is-off):active span { scale: .97; }
+
+/* After booking */
+[hidden] { display: none !important; }
+.booked { text-align: center; justify-items: center; outline: none; }
+@starting-style { .booked { opacity: 0; translate: 0 8px; } }
+.booked { transition: opacity .35s var(--ease), translate .35s var(--ease); }
+.booked-icon { font-size: 2.4rem; color: var(--accent); }
+.booked h3 { font-size: 2rem; }
+.booked-when { font-weight: 700; color: var(--ink); }
+.booked p:not(.booked-when) { color: var(--muted); max-width: 30rem; }
+.btn:disabled { opacity: .6; cursor: progress; }
+
 .form-error { color: #b03a2e; font-size: .88rem; transition: opacity .15s var(--ease), translate .15s var(--ease); }
 .form-error:empty { display: none; }
 @starting-style { .form-error { opacity: 0; translate: 0 -4px; } } /* fades in when the message appears */

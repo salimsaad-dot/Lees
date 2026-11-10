@@ -1,5 +1,4 @@
 // Lee's Beauty Studio
-const WHATSAPP_NUMBER = "233508690377"; // international format, no "+" or leading 0
 
 // Photos fade in once downloaded (no pop-in on slow mobile data). Already-cached ones show at once.
 document.querySelectorAll(".fade-img, .arch-img").forEach((img) => {
@@ -168,68 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /* ---------- Booking form → WhatsApp ---------- */
-  const form = document.getElementById("bookingForm");
-  const serviceSel = document.getElementById("service");
-  const dateInput = document.getElementById("date");
-  const areaField = document.getElementById("areaField");
-  const areaInput = document.getElementById("area");
-  const errorEl = document.getElementById("formError");
-
-  // No past dates
-  const today = new Date();
-  const pad = (n) => String(n).padStart(2, "0");
-  dateInput.min = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
-
-  // "Book" links on service cards pre-select that service
-  document.querySelectorAll("[data-service]").forEach((link) => {
-    link.addEventListener("click", () => { serviceSel.value = link.dataset.service; });
-  });
-
-  // Show "area" only for home service
-  form.querySelectorAll('input[name="where"]').forEach((r) => {
-    r.addEventListener("change", () => {
-      const home = form.where.value === "Home service";
-      areaField.classList.toggle("is-open", home);
-      areaField.inert = !home;
-      areaField.setAttribute("aria-hidden", String(!home));
-      areaInput.required = home;
-      if (!home) areaInput.classList.remove("invalid");
-    });
-  });
-
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    errorEl.textContent = "";
-    form.querySelectorAll(".invalid").forEach((el) => el.classList.remove("invalid"));
-
-    const required = [...form.querySelectorAll("[required]")].filter((el) => !el.value.trim());
-    if (required.length) {
-      required.forEach((el) => el.classList.add("invalid"));
-      required[0].focus();
-      errorEl.textContent = "Please fill in the highlighted fields.";
-      return;
-    }
-
-    const d = new Date(dateInput.value + "T00:00");
-    const niceDate = d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "long", year: "numeric" });
-    const where = form.where.value;
-
-    const lines = [
-      "Hi Lisa! I'd like to book an appointment at Lee's Beauty Studio.",
-      "",
-      `*Service:* ${serviceSel.value}`,
-      `*Date:* ${niceDate}`,
-      `*Time:* ${form.time.value}`,
-      `*Where:* ${where}${where === "Home service" ? ` (${areaInput.value.trim()})` : ""}`,
-      `*Name:* ${form.elements.namedItem("name").value.trim()}`,
-    ];
-    const notes = form.notes.value.trim();
-    if (notes) lines.push(`*Notes:* ${notes}`);
-
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
-    window.open(url, "_blank", "noopener");
-  });
+  /* Booking form: see booking.js */
 
   /* ---------- Footer year ---------- */
   document.getElementById("year").textContent = new Date().getFullYear();
