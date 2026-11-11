@@ -136,7 +136,10 @@ function offerToTell(slot) {
       <button type="button" class="link-btn" data-dismiss>Not now</button>
     </div>`;
   notice.hidden = false;
-  notice.focus();
+  // The notice sits above the list; bring it on screen (Safari doesn't scroll to a focused box by itself)
+  const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+  notice.scrollIntoView({ block: "center", behavior: smooth ? "smooth" : "auto" });
+  notice.focus({ preventScroll: true });
 }
 notice.addEventListener("click", (e) => {
   if (e.target.closest("[data-told], [data-dismiss]")) setTimeout(() => { notice.hidden = true; notice.innerHTML = ""; }, 300);
