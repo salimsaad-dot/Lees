@@ -96,13 +96,19 @@ h1 em, h2 em { font-style: italic; color: var(--accent); font-weight: 500; }
 /* ---------- Header ---------- */
 .site-header {
   position: fixed; inset: 0 0 auto; z-index: 100; height: var(--header-h);
+/* The frosted blur sits on a layer behind the header, not on the header itself:
+   a backdrop-filter on the header would trap the full-screen phone menu inside the 72px bar. */
   display: flex; align-items: center;
-  transition: background .35s var(--ease), box-shadow .35s var(--ease);
+  transition: box-shadow .35s var(--ease);
 }
-.site-header.scrolled {
+.site-header::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  transition: background .35s var(--ease);
+}
+.site-header.scrolled { box-shadow: 0 1px 0 var(--line); }
+.site-header.scrolled::before {
   background: rgba(250, 246, 241, .88);
   backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px);
-  box-shadow: 0 1px 0 var(--line);
 }
 .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 
