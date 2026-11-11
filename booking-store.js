@@ -7,7 +7,7 @@
 // Public `slots` docs hold no personal details; names and numbers live in
 // `bookings`, which only Lisa can read.
 
-import { FIREBASE_CONFIG, FIREBASE_READY, SCHEDULE, USE_EMULATOR } from "./booking-config.js";
+import { FIREBASE_CONFIG, FIREBASE_READY, SCHEDULE, USE_EMULATOR, EMAIL_ALERT } from "./booking-config.js";
 
 export { SCHEDULE, FIREBASE_READY };
 export const DEMO = !FIREBASE_READY;
@@ -122,6 +122,38 @@ export async function book({ date, time, service, where, area, name, phone, note
     // permission-denied here almost always means the slot was created a moment ago
     if (e instanceof SlotTakenError || e?.code === "permission-denied" || e?.code === "aborted") throw new SlotTakenError();
     throw e;
+  }
+}
+
+/* ---------- Email alert to Lisa (EmailJS, sent after a booking is saved) ---------- */
+export const ALERT_READY = Boolean(EMAIL_ALERT.serviceId && EMAIL_ALERT.templateId && EMAIL_ALERT.publicKey);
+
+/** Never throws: a failed email must not spoil a booking that's already saved. Resolves true if sent. */
+export async function sendAlert(d) {
+  if (DEMO || !ALERT_READY) return false;
+  try {
+    const res = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+      method: "POST",
+      keepalive: true, // still goes out if the client jumps straight to WhatsApp
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        service_id: EMAIL_ALERT.serviceId,
+        template_id: EMAIL_ALERT.templateId,
+        user_id: EMAIL_ALERT.publicKey,
+        template_params: {
+          service: d.service,
+          when: `${dayLabel(d.date)} at ${timeLabel(d.time)}`,
+          where: d.where + (d.area ? ` (${d.area})` : ""),
+          name: d.name,
+          phone: d.phone,
+          notes: d.notes || "None",
+          admin_link: new URL("admin.html", location.href).href.split("?")[0],
+        },
+      }),
+    });
+    return res.ok;
+  } catch {
+    return false;
   }
 }
 

@@ -1,7 +1,7 @@
 // Lee's Beauty Studio · booking form (free times → lock the slot → WhatsApp details)
 import {
   todayISO, lastBookableISO, isOpenDay, slotsFor, timeLabel, dayLabel,
-  watchTaken, book, SlotTakenError,
+  watchTaken, book, sendAlert, SlotTakenError,
 } from "./booking-store.js";
 
 const WHATSAPP_NUMBER = "233508690377";
@@ -134,6 +134,7 @@ form.addEventListener("submit", async (e) => {
   bookBtn.textContent = "Booking…";
   try {
     await book(data);
+    sendAlert(data); // email to Lisa; runs in the background
     showBooked(data);
   } catch (err) {
     if (err instanceof SlotTakenError) {

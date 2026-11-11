@@ -16,6 +16,15 @@ export const FIREBASE_CONFIG = {
   appId: "",
 };
 
+// 3) EMAIL ALERT: Lisa gets an email (→ phone notification) for every booking.
+//    Free EmailJS account (emailjs.com): Email Services → service ID,
+//    Email Templates → template ID, Account → Public key. Empty = no alert.
+export const EMAIL_ALERT = {
+  serviceId: "",
+  templateId: "",
+  publicKey: "",
+};
+
 export const SCHEDULE = {
   // Ghana is UTC+0 all year (no daylight saving), so times here are Ghana time.
   // TODO: confirm with Lisa. 0 = Sunday … 6 = Saturday.
