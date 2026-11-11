@@ -8,12 +8,12 @@
 // ------------------------------------------------------------------
 
 export const FIREBASE_CONFIG = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: "",
+  apiKey: "AIzaSyDWpJw9i8Rr9jN4lrU92Opq5Ishk-Ny3VI",
+  authDomain: "lees-beauty-studio.firebaseapp.com",
+  projectId: "lees-beauty-studio",
+  storageBucket: "lees-beauty-studio.firebasestorage.app",
+  messagingSenderId: "809450705282",
+  appId: "1:809450705282:web:4dab417ada604d94dd7f9b",
 };
 
 // 3) EMAIL ALERT: Lisa gets an email (→ phone notification) for every booking.
