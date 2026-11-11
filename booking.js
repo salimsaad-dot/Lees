@@ -1,7 +1,7 @@
 // Lee's Beauty Studio · booking form (free times → lock the slot → WhatsApp details)
 import {
   todayISO, lastBookableISO, isOpenDay, slotsFor, timeLabel, dayLabel,
-  watchTaken, book, sendAlert, SlotTakenError,
+  watchTaken, book, sendAlert, warmUp, SlotTakenError,
 } from "./booking-store.js";
 
 const WHATSAPP_NUMBER = "233508690377";
@@ -18,6 +18,14 @@ const booked = document.getElementById("booked");
 
 dateInput.min = todayISO();
 dateInput.max = lastBookableISO();
+
+// Start downloading the booking database code before the visitor reaches the form
+// (matters on slow mobile data). Also on first touch of any field, whichever comes first.
+if ("IntersectionObserver" in window) {
+  const io = new IntersectionObserver(([en]) => { if (en.isIntersecting) { warmUp(); io.disconnect(); } }, { rootMargin: "1200px 0px" });
+  io.observe(form);
+} else warmUp();
+form.addEventListener("focusin", warmUp, { once: true });
 
 /* ---------- Service cards pre-select the service ---------- */
 document.querySelectorAll("[data-service]").forEach((link) =>
@@ -77,11 +85,16 @@ function loadSlots() {
   if (!isOpenDay(date)) return note(`Lisa is closed on ${dayLabel(date, { weekday: "long" })}s. Please pick another day.`);
   slotsBox.setAttribute("aria-busy", "true");
   note("Checking free times…");
-  stopWatching = watchTaken(
+  // Slow connection: say so after 10s (keeps trying in the background)
+  const slow = setTimeout(() => {
+    if (slotsBox.getAttribute("aria-busy")) note(`Your connection is slow, still checking… You can also <a href="https://wa.me/${WHATSAPP_NUMBER}" target="_blank" rel="noopener">message Lisa on WhatsApp</a>.`);
+  }, 10000);
+  const unwatch = watchTaken(
     date,
-    (taken) => { slotsBox.removeAttribute("aria-busy"); renderSlots(date, taken); },
-    () => { slotsBox.removeAttribute("aria-busy"); note("Couldn't load the times. Check your connection, or message Lisa on WhatsApp."); }
+    (taken) => { clearTimeout(slow); slotsBox.removeAttribute("aria-busy"); renderSlots(date, taken); },
+    () => { clearTimeout(slow); slotsBox.removeAttribute("aria-busy"); note(`Couldn't load the times. Check your connection, or <a href="https://wa.me/${WHATSAPP_NUMBER}" target="_blank" rel="noopener">message Lisa on WhatsApp</a>.`); }
   );
+  stopWatching = () => { clearTimeout(slow); unwatch(); };
 }
 dateInput.addEventListener("change", loadSlots);
 dateInput.addEventListener("input", loadSlots);

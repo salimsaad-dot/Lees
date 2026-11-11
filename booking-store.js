@@ -45,25 +45,40 @@ export class SlotTakenError extends Error {
 }
 
 /* ---------- Firebase (loaded only when configured) ---------- */
+// Visitors only download the database code; the sign-in code loads on Lisa's page only.
 const V = "10.12.2";
-let fbPromise;
+let fbPromise, authPromise;
 function firebase() {
   fbPromise ??= (async () => {
-    const [{ initializeApp }, fs, au] = await Promise.all([
+    const [{ initializeApp }, fs] = await Promise.all([
       import(`https://www.gstatic.com/firebasejs/${V}/firebase-app.js`),
       import(`https://www.gstatic.com/firebasejs/${V}/firebase-firestore.js`),
-      import(`https://www.gstatic.com/firebasejs/${V}/firebase-auth.js`),
     ]);
     const app = initializeApp(FIREBASE_CONFIG);
     const db = fs.getFirestore(app);
-    const auth = au.getAuth(app);
-    if (USE_EMULATOR) {
-      fs.connectFirestoreEmulator(db, "127.0.0.1", 8080);
-      au.connectAuthEmulator(auth, "http://127.0.0.1:9099", { disableWarnings: true });
-    }
-    return { fs, au, db, auth };
+    if (USE_EMULATOR) fs.connectFirestoreEmulator(db, "127.0.0.1", 8080);
+    return { app, fs, db };
   })();
+  fbPromise.catch(() => (fbPromise = null)); // allow a retry after a failed download
   return fbPromise;
+}
+function firebaseAuth() {
+  authPromise ??= (async () => {
+    const [{ app, fs, db }, au] = await Promise.all([
+      firebase(),
+      import(`https://www.gstatic.com/firebasejs/${V}/firebase-auth.js`),
+    ]);
+    const auth = au.getAuth(app);
+    if (USE_EMULATOR) au.connectAuthEmulator(auth, "http://127.0.0.1:9099", { disableWarnings: true });
+    return { fs, db, au, auth };
+  })();
+  authPromise.catch(() => (authPromise = null));
+  return authPromise;
+}
+
+/** Start downloading the database code early (e.g. when the booking form comes near). */
+export function warmUp() {
+  if (!DEMO) firebase().catch(() => {});
 }
 
 /* ---------- Demo mode (no Firebase yet): saved in this browser only ---------- */
@@ -160,19 +175,19 @@ export async function sendAlert(d) {
 /* ---------- Admin API (Lisa's page) ---------- */
 
 export async function onAuth(cb) {
-  const { au, auth } = await firebase();
+  const { au, auth } = await firebaseAuth();
   return au.onAuthStateChanged(auth, cb);
 }
 export async function signIn(email, password) {
-  const { au, auth } = await firebase();
+  const { au, auth } = await firebaseAuth();
   return au.signInWithEmailAndPassword(auth, email, password);
 }
 export async function signOut() {
-  const { au, auth } = await firebase();
+  const { au, auth } = await firebaseAuth();
   return au.signOut(auth);
 }
 export async function sendReset(email) {
-  const { au, auth } = await firebase();
+  const { au, auth } = await firebaseAuth();
   return au.sendPasswordResetEmail(auth, email);
 }
 
