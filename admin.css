@@ -40,6 +40,14 @@
 .appt-actions .danger { color: #b03a2e; }
 .appt.is-blocked { background: transparent; border-style: dashed; }
 .appt.is-blocked .appt-title { color: var(--muted); }
+.notice {
+  margin-bottom: 1rem; padding: 1rem 1.1rem; border-radius: 14px; outline: none;
+  background: var(--tint); border: 1px solid var(--accent-light); display: grid; gap: .7rem;
+}
+.notice-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem; }
+.notice .link-btn { justify-self: auto; }
+@starting-style { .notice { opacity: 0; translate: 0 -6px; } }
+.notice { transition: opacity .25s var(--ease), translate .25s var(--ease); }
 .empty { color: var(--muted); padding: 1.2rem; border: 1px dashed var(--line); border-radius: 14px; text-align: center; }
 
 /* Block-time picker: checkboxes styled like the booking slots */

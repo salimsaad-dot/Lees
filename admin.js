@@ -47,6 +47,8 @@ $("forgot").addEventListener("click", async () => {
 $("signOut").addEventListener("click", () => signOut());
 
 /* ---------- Upcoming list ---------- */
+let current = new Map(); // id → slot (+ booking) currently shown
+
 function render(items, error) {
   if (error) {
     panel.hidden = true;
@@ -60,6 +62,7 @@ function render(items, error) {
   const today = todayISO();
   const nowMs = Date.now();
   const upcoming = items.filter((s) => new Date(`${s.date}T${s.time}:00Z`).getTime() > nowMs - 3 * 3600e3);
+  current = new Map(upcoming.map((s) => [s.id, s]));
   const booked = upcoming.filter((s) => s.kind === "booked");
   const todayCount = booked.filter((s) => s.date === today).length;
   $("count").textContent = `${booked.length} booked · ${todayCount} today`;
@@ -106,9 +109,37 @@ list.addEventListener("click", async (e) => {
     ? `Cancel ${btn.dataset.name}'s booking? The time becomes free on the website again.`
     : "Unblock this time? It becomes free on the website again.";
   if (!confirm(q)) return;
+  const slot = current.get(btn.dataset.free);
   btn.disabled = true;
-  try { await freeSlot(btn.dataset.free); }
-  catch { btn.disabled = false; alert("Couldn't do that. Check your internet and try again."); }
+  try {
+    await freeSlot(btn.dataset.free);
+    if (btn.dataset.what === "cancel" && slot?.booking) offerToTell(slot);
+  } catch { btn.disabled = false; alert("Couldn't do that. Check your internet and try again."); }
+});
+
+/* ---------- After cancelling: one tap to tell the client on WhatsApp (pre-written, editable) ---------- */
+const notice = $("notice");
+const bookUrl = location.origin + location.pathname.replace(/admin\.html$/, "") + "#book";
+function offerToTell(slot) {
+  const b = slot.booking;
+  const first = b.name.trim().split(/\s+/)[0];
+  const text =
+    `Hi ${first}, this is Lisa from Lee's Beauty Studio. I'm sorry, I need to cancel your ` +
+    `${b.service} appointment on ${dayLabel(slot.date)} at ${timeLabel(slot.time)}. ` +
+    `Would another day work for you? You can pick a new time here: ${bookUrl}`;
+  notice.innerHTML = `
+    <p><strong>${esc(b.name)}'s booking is cancelled.</strong> They don't know yet. Let them know:</p>
+    <div class="notice-actions">
+      <a class="btn btn-small" href="https://wa.me/${intl(b.phone)}?text=${encodeURIComponent(text)}" target="_blank" rel="noopener" data-told>
+        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Tell ${esc(first)} on WhatsApp
+      </a>
+      <button type="button" class="link-btn" data-dismiss>Not now</button>
+    </div>`;
+  notice.hidden = false;
+  notice.focus();
+}
+notice.addEventListener("click", (e) => {
+  if (e.target.closest("[data-told], [data-dismiss]")) setTimeout(() => { notice.hidden = true; notice.innerHTML = ""; }, 300);
 });
 
 /* ---------- Block time off ---------- */
