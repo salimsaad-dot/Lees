@@ -20,9 +20,9 @@ export const FIREBASE_CONFIG = {
 //    Free EmailJS account (emailjs.com): Email Services → service ID,
 //    Email Templates → template ID, Account → Public key. Empty = no alert.
 export const EMAIL_ALERT = {
-  serviceId: "",
-  templateId: "",
-  publicKey: "",
+  serviceId: "service_c4aimnj",
+  templateId: "template_ihp5lcn",
+  publicKey: "2xxYYCbrZCohZObtM",
 };
 
 export const SCHEDULE = {
